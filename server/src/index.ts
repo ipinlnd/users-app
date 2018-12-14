@@ -92,6 +92,14 @@ const resolvers =
 		},
 		addMotto: (root: any, {id, motto}: {id: number, motto: String}) =>
 		{
+			return Account.update({motto: motto}, {where: {id: id}}).then(user =>
+			{
+				return Account.findOne({where: {id : id}}).then(value =>
+				{
+					if (!value) return 0
+					return value.dataValues
+				})
+			})
 		}
 	},
 	User:
