@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import { Container, Content, Header, Form, Item, Label, Input, Button, Toast} from 'native-base';
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 const SIGNUP_MUTATION = gql `
 	mutation register($user: String!, $pass: String!)
@@ -81,13 +82,23 @@ export class Login extends React.Component
 
 	addLoginMutation()
 	{
-		const { push } = this.props.navigation;
 		return(
 			<Mutation mutation={LOGIN_MUTATION}
 				onCompleted={(data) =>
 				{
 					if (data.login > 0)
-						push('Main', {id: data.login})
+					{
+						global.id = data.login
+
+						this.props.navigation.dispatch(StackActions.reset(
+						{
+							index: 0,
+							actions: [NavigationActions.navigate(
+							{
+								routeName: 'Main'
+							})]
+						}))
+					}
 					else
 						Toast.show(
 						{
@@ -108,6 +119,7 @@ export class Login extends React.Component
 			<Mutation mutation={SIGNUP_MUTATION}
 				onCompleted={(data) =>
 				{
+					this.props.screenProps.client.resetStore()
 					Toast.show(
 					{
 						text: `Added user with id ${data.register.id}`,

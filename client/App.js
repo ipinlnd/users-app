@@ -63,7 +63,7 @@ export default class App extends React.Component
 		return (
 			<Root>
 				<ApolloProvider client={client}>
-					<AppContainer />
+					<AppContainer screenProps={{client: client}}/>
 				</ApolloProvider>
 			</Root>
 		);

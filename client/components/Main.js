@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, ScrollView, AsyncStorage} from 'react-native';
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation' 
+import { createBottomTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation' 
 import { Container, Content, Header, Form, Item, Label, Input, Button, Card, CardItem} from 'native-base';
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -26,7 +26,7 @@ const UPDATE_MUTATION = gql `
 		}
 	}
 `
-var ownId
+
 var users = []
 
 class You extends React.Component
@@ -37,8 +37,14 @@ class You extends React.Component
 
 		this.t = users.findIndex(function(element)
 		{
-			return element.id == ownId
+			return element.id == global.id
 		})
+
+		if (this.t < 0)
+		{
+			t = 0
+			this.logout()
+		}
 
 		this.state =
 		{
@@ -55,14 +61,12 @@ class You extends React.Component
 	{
 		const motto = this.state.motto
 
-		console.log(ownId, motto)
-
-		addMotto({variables: {id: ownId, motto}})
+		addMotto({variables: {id: global.id, motto}})
 		this.setState(
 		{
 			motto: motto
 		})
-		users[this.t].motto = motto
+		this.props.screenProps.client.resetStore()
 	}
 
 	getForm(addMotto, data)
@@ -103,7 +107,14 @@ class You extends React.Component
 		{
 			console.log(e)
 		}
-		this.props.screenProps.dadnav.navigate('Login')
+		this.props.screenProps.dadnav.dispatch(StackActions.reset(
+		{
+			index: 0,
+			actions: [NavigationActions.navigate(
+			{
+				routeName: 'Login'
+			})]
+		}))
 	}
 
 	render()
@@ -168,7 +179,7 @@ class Others extends React.Component
 								users = data.users
 								return (
 									<View>
-										<Card style={{height: '90%'}}>
+										<Card style={{height: '100%'}}>
 											{users.map((user, index) =>
 												<CardItem key={index}
 													style={{ marginLeft: '5%',
@@ -234,7 +245,7 @@ export class Main extends React.Component
 		{
 			const value = await AsyncStorage.getItem('id');
 			if (value !== null)
-				ownId = value;
+				global.id = value;
 		}
 		catch (error)
 		{
@@ -245,23 +256,26 @@ export class Main extends React.Component
 	constructor(props)
 	{
 		super(props)
+	}
+
+	render()
+	{
 		const { navigate } = this.props.navigation;
 
 		this.getData().then(() =>
 		{
-			if (!ownId)
-				ownId = this.props.navigation.getParam('id', 0)
-
-			if (!ownId)
+			if (!global.id)
 				navigate('Login')
 			else
-				this.storeData(ownId)
+				this.storeData(global.id)
 		})
-	}
-	render()
-		{
+
 		return(
-			<AppContainer screenProps={{dadnav: this.props.navigation}}/>
+			<AppContainer screenProps={
+				{
+					dadnav: this.props.navigation,
+					client: this.props.screenProps.client
+				}}/>
 		)
 	}
 }
