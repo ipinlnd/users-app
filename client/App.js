@@ -2,6 +2,22 @@ import React from 'react';
 import { View } from 'react-native';
 import { Font } from 'expo'
 import { Root } from "native-base"
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+
+import { Login } from './components/Login'
+import { Main } from './components/Main'
+
+const RootStack = createStackNavigator(
+{
+	Login: Login,
+	Main: Main
+},
+{
+	initialRouteName: 'Login',
+	headerMode: 'none'
+})
+
+const AppContainer = createAppContainer(RootStack)
 
 export default class App extends React.Component
 {
@@ -31,7 +47,7 @@ export default class App extends React.Component
 			return (<View></View>)
 		return (
 				<Root>
-					<View />
+					<AppContainer />
 				</Root>
 		);
 	}
