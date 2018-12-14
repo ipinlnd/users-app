@@ -1,0 +1,38 @@
+{
+  "name": "users_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "spin start",
+    "build": "spin build",
+    "test": "spin test"
+  },
+  "author": "ipinlnd",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-boost": "^0.1.22",
+    "graphql": "^14.0.2",
+    "graphql-yoga": "^1.16.7",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.7.1",
+    "pg-hstore": "^2.3.2",
+    "reflect-metadata": "^0.1.12",
+    "sequelize": "^4.41.2",
+    "sequelize-typescript": "^0.6.6",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.4",
+    "@types/express": "^4.11.1",
+    "@types/graphql": "^0.13.1",
+    "@types/node": "10.1.4",
+    "@types/webpack-env": "^1.13.6",
+    "@types/ws": "^5.1.1",
+    "spinjs": "^0.4.176",
+    "webpack": "^4.27.0",
+    "webpack-virtual-modules": "^0.1.10"
+  }
+}
