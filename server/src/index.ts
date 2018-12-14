@@ -87,6 +87,8 @@ const resolvers =
 		},
 		register: (root: any, {username, password} : {username: String, password: String}) =>
 		{
+			const user = new Account({name: username, password: password, motto: ''})
+			return user.save().then(e => {return e.dataValues})
 		},
 		addMotto: (root: any, {id, motto}: {id: number, motto: String}) =>
 		{
