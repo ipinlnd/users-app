@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, ScrollView, AsyncStorage} from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation' 
-import { Container, Content, Header, Form, Item, Label, Input, Button} from 'native-base';
+import { Container, Content, Header, Form, Item, Label, Input, Button, Card, CardItem} from 'native-base';
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -26,7 +26,7 @@ const UPDATE_MUTATION = gql `
 		}
 	}
 `
-var ownId = 4
+var ownId
 var users = []
 
 class You extends React.Component
@@ -114,23 +114,20 @@ class You extends React.Component
 			</Header>
 				<Content>
 					<View style={{flex:1}}>
-						<View style={{margin: '5%', alignItems: 'flex-start', flexDirection: 'row'}}>
-							<Text>
-								You are:
-							</Text>
-							<Text style={{margin: '10%', fontSize: 30, padding: 10, borderRadius: 4, borderWidth: .3}}>
+						<View style={{alignItems: 'center', backgroundColor: '#F5F5F5', padding: 10, justifyContent: 'center'}}>
+							<Text style={{fontSize: 30, padding: 10}}>
 								{users[this.t].username}
 							</Text>
 						</View>
-						<View style={{marginLeft: '5%', marginTop: '2%', alignItems: 'flex-start'}}>
-							<Text>
+						<View style={{marginLeft: '5%', marginTop: '5%', alignItems: 'flex-start'}}>
+							<Text style={{color: 'red'}}>
 								Your Motto is:
 							</Text>
 							<Text adjustsFontSizeToFit={true}
 								style={{marginTop: '5%',
 										marginLeft: '5%',
 										marginRight: '5%',
-										fontSize: 20, padding: 10, borderRadius: 4, borderWidth: .3}}>
+										fontSize: 20, padding: 10}}>
 								{users[this.t].motto}
 							</Text>
 						</View>
@@ -140,7 +137,7 @@ class You extends React.Component
 					</View>
 					<Button danger block style={{marginTop: '20%'}}
 						onPress={this.logout.bind(this)}>
-						<Text>
+						<Text style={{color: 'white'}}>
 							Logout
 						</Text>
 					</Button>
@@ -171,19 +168,19 @@ class Others extends React.Component
 								users = data.users
 								return (
 									<View>
-										<ScrollView pagingEnabled={true}>
+										<Card style={{height: '90%'}}>
 											{users.map((user, index) =>
-												<View key={index}
+												<CardItem key={index}
 													style={{ marginLeft: '5%',
 													marginRight: '5%',
 													marginTop: '5%',
 													borderWidth: .1,
 													backgroundColor: '#EEEEEE'}}>
-													<Text>{user.username}</Text>
+													<Text style={{color: 'red'}}>{user.username} : </Text>
 													<Text>{user.motto}</Text>
-												</View>
+												</CardItem>
 											)}
-										</ScrollView>
+										</Card>
 									</View>
 								)
 							}}
