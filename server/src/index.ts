@@ -2,6 +2,9 @@ import {Sequelize} from 'sequelize-typescript'
 import { GraphQLServer } from 'graphql-yoga'
 import {Account} from './models/Account'
 
+var passport = require('passport')
+var LocalStrategy = require('passport-local').Strategy
+
 const sequelize =  new Sequelize(
 {
 	database: 'users',
@@ -22,6 +25,39 @@ sequelize.authenticate().then(() =>
 	console.error('Unable to connect to the database:', err)
 });
 
+passport.use('local', new LocalStrategy(
+	function(username: String, password: String, done: Function)
+	{
+		Account.findOne({where: {name: username}}).then(function(user)
+		{
+			if (!user)
+				return done(null, false, { message: 'Incorrect username'})
+
+			if (user.password != password)
+				return done(null, false, { message: 'Incorrect password'})
+
+			var userinfo = user.get()
+				return done(null, userinfo)
+		})
+	}
+))
+
+function login(req: any)
+{
+	return new Promise((resolve, reject) =>
+	{
+		passport.authenticate('local', (err: any, user: any) =>
+		{
+			if (err)
+				reject(0)
+			if (!user)
+				resolve(0)
+
+			resolve(user.id)
+		})(req)
+	})
+}
+
 const resolvers =
 {
 	Query:
@@ -34,6 +70,20 @@ const resolvers =
 	{
 		login: (root: any, {username, password} : {username: String, password: String}) =>
 		{
+			const req =
+			{
+				body:
+				{
+					url: '/',
+					method: "post",
+					action: "login",
+					username: username,
+					password: password
+				},
+				logIn: () => {}
+			}
+
+			return login(req)
 		},
 		register: (root: any, {username, password} : {username: String, password: String}) =>
 		{
