@@ -17,7 +17,7 @@ const RootStack = createStackNavigator(
 	Main: Main
 },
 {
-	initialRouteName: 'Login',
+	initialRouteName: 'Main',
 	headerMode: 'none'
 })
 

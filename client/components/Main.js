@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View} from 'react-native';
+import { Text, View, ScrollView, AsyncStorage} from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation' 
+import { Container, Content, Header, Form, Item, Label, Input, Button} from 'native-base';
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
