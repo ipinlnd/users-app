@@ -64,6 +64,7 @@ const resolvers =
 	{
 		users: (root: any) =>
 		{
+			return Account.findAll()
 		}
 	},
 	Mutation:
