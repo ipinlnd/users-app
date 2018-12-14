@@ -94,6 +94,14 @@ class You extends React.Component
 
 	async logout()
 	{
+		try
+		{
+			await AsyncStorage.removeItem('id')
+		}
+		catch (e)
+		{
+			console.log(e)
+		}
 		this.props.screenProps.dadnav.navigate('Login')
 	}
 
@@ -210,10 +218,52 @@ const AppContainer = createAppContainer(Tabs)
 
 export class Main extends React.Component
 {
+	async storeData(id)
+	{
+		try
+		{
+			await AsyncStorage.setItem('id', id)
+		}
+		catch (e)
+		{
+			console.log(e)
+		}
+	}
+
+	async getData()
+	{
+		try
+		{
+			const value = await AsyncStorage.getItem('id');
+			if (value !== null)
+				ownId = value;
+		}
+		catch (error)
+		{
+			console.log(error)
+		}
+	}
+
+	constructor(props)
+	{
+		super(props)
+		const { navigate } = this.props.navigation;
+
+		this.getData().then(() =>
+		{
+			if (!ownId)
+				ownId = this.props.navigation.getParam('id', 0)
+
+			if (!ownId)
+				navigate('Login')
+			else
+				this.storeData(ownId)
+		})
+	}
 	render()
 		{
 		return(
-			<AppContainer />
+			<AppContainer screenProps={{dadnav: this.props.navigation}}/>
 		)
 	}
 }
