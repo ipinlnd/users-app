@@ -11,61 +11,51 @@ import { ApolloProvider } from 'react-apollo'
 import { Login } from './components/Login'
 import { Main } from './components/Main'
 
-const RootStack = createStackNavigator(
-{
-	Login: Login,
-	Main: Main
-},
-{
-	initialRouteName: 'Main',
-	headerMode: 'none'
+const RootStack = createStackNavigator({
+  Login: Login,
+  Main: Main
+}, {
+  initialRouteName: 'Main',
+  headerMode: 'none'
 })
 
 const AppContainer = createAppContainer(RootStack)
 
-const httpLink = createHttpLink(
-{
-	uri: 'http://192.168.1.53:4000'
+const httpLink = createHttpLink({
+  uri: 'http://192.168.1.53:4000'
 })
 
-const client = new ApolloClient(
-{
-	link: httpLink,
-	cache: new InMemoryCache()
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
 })
 
-export default class App extends React.Component
-{
-	constructor(props)
-	{
-		super(props)
+export default class App extends React.Component {
+  constructor(props) {
+    super(props)
 
-		this.state = 
-		{
-			loaded: false,
-		}
-	}
-	async componentWillMount() 
-	{
-		await Font.loadAsync(
-		{
-			'Roboto': require('native-base/Fonts/Roboto.ttf'),
-			'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-		});
+    this.state = {
+      loaded: false,
+    }
+  }
+  async componentWillMount() {
+    await Font.loadAsync({
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    });
 
-		this.setState({loaded: true})
-	}
+    this.setState({loaded: true})
+  }
 
-	render()
-	{
-		if (!this.state.loaded) 
-			return (<View></View>)
-		return (
-			<Root>
-				<ApolloProvider client={client}>
-					<AppContainer screenProps={{client: client}}/>
-				</ApolloProvider>
-			</Root>
-		);
-	}
+  render() {
+    if (!this.state.loaded)
+      return (<View></View>)
+    return (
+      <Root>
+        <ApolloProvider client={client}>
+          <AppContainer screenProps={{client: client}}/>
+        </ApolloProvider>
+      </Root>
+    );
+  }
 }

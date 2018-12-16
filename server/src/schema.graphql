@@ -1,19 +1,16 @@
-type Query
-{
-	users: [User!]!
+type Query {
+  users: [User!]!
 }
 
-type Mutation
-{
-	register(username: String!, password: String!): User!
-	login(username: String!, password: String!): ID!
-	addMotto(id: ID!, motto: String!): User!
+type Mutation {
+  register(username: String!, password: String!): User!
+  login(username: String!, password: String!): ID!
+  addMotto(id: ID!, motto: String!): User!
 }
 
-type User
-{
-	id: ID!
-	username: String!
-	password: String!
-	motto: String!
+type User {
+  id: ID!
+  username: String!
+  password: String!
+  motto: String!
 }
